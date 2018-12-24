@@ -1,5 +1,5 @@
 <template>
-  <div>哈哈</div>
+  <h1>{{ msg }}</h1>
 </template>
 
 <script>
@@ -11,7 +11,7 @@ export default {
     }
   }
 }
-}
+
 </script>
 
 <style>
