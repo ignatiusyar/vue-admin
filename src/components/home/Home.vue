@@ -3,12 +3,12 @@
     <el-header>
       <div class="logo"></div>
       <div class="title">
-        <h1>DL Content Manage System</h1>
+        <h1></h1>
       </div>
       <div class="logstatus">
-        <span>亲爱的{{ username }}，欢迎您</span>
+        <span>Dear {{ username }}，Welcome Back</span>
         <i>|</i>
-        <a href="javascript:;" @click="logout">退出</a>
+        <a href="javascript:;" @click="logout">Logout</a>
       </div>
     </el-header>
     <el-container>
@@ -16,7 +16,7 @@
         <el-menu
           default-active="/home"
           class="el-menu-vertical-demo"
-          background-color="#545c64"
+          background-color="#254673"
           text-color="#fff"
           active-text-color="#ffd04b"
           unique-opened
@@ -37,11 +37,11 @@
               <i class="el-icon-location"></i>
               <span>权限管理</span>
             </template>
-            <el-menu-item index="2-1">
+            <el-menu-item index="/roles">
               <i class="el-icon-menu"></i>
               <span slot="title">角色列表</span>
             </el-menu-item>
-            <el-menu-item index="2-2">
+            <el-menu-item index="/rights">
               <i class="el-icon-menu"></i>
               <span slot="title">权限列表</span>
             </el-menu-item>
@@ -74,19 +74,19 @@ export default {
     this.username = localStorage.getItem('whoami')
   },
   methods: {
-    logout() {
-      this.$confirm('您确定要退出本系统吗?', '系统提示', {
+    // 退出功能
+    async logout() {
+      await this.$confirm('您确定要退出本系统吗?', '系统提示', {
         type: 'warning'
       })
-        .then(() => {
-          localStorage.removeItem('token')
-          localStorage.removeItem('whoami')
-          this.$router.push('/login')
-          this.$message.success('您已成功退出系统')
-        })
-        .catch(() => {
-          this.$message.info('取消操作成功')
-        })
+      try {
+        localStorage.removeItem('token')
+        localStorage.removeItem('whoami')
+        this.$router.push('/login')
+        this.$message.success('您已成功退出系统')
+      } catch (e) {
+        this.$message.info('取消操作成功')
+      }
     }
   }
 }
@@ -96,15 +96,15 @@ export default {
 .home {
   height: 100%;
   .el-header {
-    background: #409eff;
-    // background-color: #545c64;
+    // background: #409eff;
+    background-color: #192f51;
     // border-bottom: 1px solid #c0c0c0;
     display: flex;
     .logo {
       width: 180px;
-      margin-left: -20px;
-      background-image: url('~@/assets/logo1.png');
-      background-size: cover;
+      margin-left: -10px;
+      background-image: url('~@/assets/logo2.png');
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: center center;
     }
@@ -132,8 +132,8 @@ export default {
     }
   }
   .el-aside {
-    background-color: #545c64;
-    // background-color: #eef1f6;
+    // background-color: #545c64;
+    background-color: #254673;
     width: 200px;
     .el-submenu {
       width: 200px;

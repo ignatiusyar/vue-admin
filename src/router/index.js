@@ -3,7 +3,11 @@ import Router from 'vue-router'
 import Login from '@/components/login/Login'
 import Home from '@/components/home/Home'
 // 引入用户组件
-import Users from '@/components/home/Users'
+import Users from '@/components/users/Users'
+// 引入权限组件
+import Rights from '@/components/rights/Rights'
+// 引入角色组件
+import Roles from '@/components/rights/Roles'
 Vue.use(Router)
 
 const router = new Router({
@@ -23,6 +27,14 @@ const router = new Router({
         {
           path: '/users',
           component: Users
+        },
+        {
+          path: '/rights',
+          component: Rights
+        },
+        {
+          path: '/roles',
+          component: Roles
         }
       ]
     }

@@ -12,3 +12,8 @@ body {
 #app {
   height: 100%;
 }
+
+.el-breadcrumb {
+  height: 40px;
+  line-height: 40px;
+}

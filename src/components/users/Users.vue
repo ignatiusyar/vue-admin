@@ -225,64 +225,60 @@ export default {
       this.getUserList()
     },
     // 删除用户
-    delUser(id, username) {
+    async delUser(id, username) {
       if (localStorage.getItem('whoami') === username) {
         this.$message.error('请勿删除当前用户')
         return false
       }
-      this.$confirm('你确定要删除该用户吗?', '警告', {
-        type: 'warning'
-      })
-        .then(() => {
-          return this.axios({
-            method: 'delete',
-            url: `users/${id}`
-          })
+      try {
+        await this.$confirm('你确定要删除该用户吗?', '警告', {
+          type: 'warning'
         })
-        .then(res => {
-          if (res.data.meta.status === 200) {
-            if (this.userList.length <= 1) {
-              this.currentPage--
-            }
-            this.getUserList()
-            this.$message.success('删除成功')
-          } else {
-            this.getUserList()
-            this.$message.error(res.data.meta.msg)
+        let res = await this.axios({
+          method: 'delete',
+          url: `users/${id}`
+        })
+        if (res.data.meta.status === 200) {
+          if (this.userList.length <= 1) {
+            this.currentPage--
           }
-        })
-        .catch(() => {
-          this.$message.info('取消删除')
-        })
+          this.getUserList()
+          this.$message.success('删除成功')
+        } else {
+          this.getUserList()
+          this.$message.error(res.data.meta.msg)
+        }
+      } catch (e) {
+        this.$message.info('取消删除')
+      }
     },
     // 显示添加模态框
     showAdd() {
       this.addDialogVisible = true
     },
     // 添加用户
-    addUser() {
-      this.$refs.addForm.validate(valid => {
-        if (!valid) return false
-        this.axios({
+    async addUser() {
+      try {
+        await this.$refs.addForm.validate()
+        let res = await this.axios({
           method: 'post',
           url: 'users',
           data: this.addForm
-        }).then(res => {
-          console.log(res)
-          console.log(res.data)
-          if (res.data.meta.status === 201) {
-            this.$refs.addForm.resetFields()
-            this.addDialogVisible = false
-            // 重新渲染页面
-            this.total++
-            this.currentPage = Math.ceil(this.total / this.pageSize)
-            this.getUserList()
-            this.$message.success('用户添加成功')
-          } else {
-            this.$message.error(res.data.meta.msg)
-          }
         })
-      })
+        if (res.data.meta.status === 201) {
+          this.$refs.addForm.resetFields()
+          this.addDialogVisible = false
+          // 重新渲染页面
+          this.total++
+          this.currentPage = Math.ceil(this.total / this.pageSize)
+          this.getUserList()
+          this.$message.success('用户添加成功')
+        } else {
+          this.$message.error(res.data.meta.msg)
+        }
+      } catch (e) {
+        return false
+      }
     },
     // 显示编辑用户模态框
     showEdit(user) {
@@ -294,24 +290,25 @@ export default {
       this.editForm.id = user.id
     },
     // 编辑用户
-    EditUser() {
-      this.$refs.editForm.validate(valid => {
-        if (!valid) return false
-        this.axios({
+    async EditUser() {
+      try {
+        await this.$refs.editForm.validate()
+        let res = await this.axios({
           method: 'put',
           url: `users/${this.editForm.id}`,
           data: this.editForm
-        }).then(res => {
-          if (res.data.meta.status === 200) {
-            this.$refs.editForm.resetFields()
-            this.editDialogVisible = false
-            this.getUserList()
-            this.$message.success('用户信息修改成功')
-          } else {
-            this.$message.error(res.data.meta.msg)
-          }
         })
-      })
+        if (res.data.meta.status === 200) {
+          this.$refs.editForm.resetFields()
+          this.editDialogVisible = false
+          this.getUserList()
+          this.$message.success('用户信息修改成功')
+        } else {
+          this.$message.error(res.data.meta.msg)
+        }
+      } catch (e) {
+        return false
+      }
     }
   }
 }
